@@ -91,8 +91,8 @@ var vm = new Vue({
 
 						this.$loading().close()
 						this.$confirm(
-							`<div style="display: grid;grid-template-columns: 1fr 1fr;">
-									<img src='${a.pic}' style='height:50%'></img>
+							`<div>
+									<img src='${a.pic}' style='height:400px'></img>
 									<div>${a.content}</div>
 									
 								</div><div>
