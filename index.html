@@ -2,6 +2,20 @@
 <html>
 	<head>
 		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0,minimum=1.0,user-scalable=no">
+		<meta name="format-detection" content="telephone=no, email=no">
+		<meta name="x5-orientation" content="landscape">
+		<meta name="x5-fullscreen" content="true">
+		<meta name="x5-page-mode" content="default">
+		<meta name="screen-orientation" content="landscape">
+		<meta name="full-screen" content="yes">
+		<meta name="browsermode" content="application">
+		<meta name="layoutmode" content="fitscreen">
+		<meta name="nightmode" content="disable">
+		<meta name="imagemode" content="force">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="apple-mobile-web-app-title" content="APP name">
 		<title></title>
 		<script src="https://cdn.bootcdn.net/ajax/libs/dashjs/3.1.1/dash.all.min.js"></script>
 		<script src="https://cdn.bootcdn.net/ajax/libs/flv.js/1.5.0/flv.min.js"></script>
@@ -36,13 +50,14 @@
 							<el-table :data="webSearchResult" style="width: 100%" @row-dblclick='webSearchDetail'>
 								<el-table-column prop="vod_name" label="名称">
 								</el-table-column>
-								<el-table-column prop="vod_time" label="日期">
-								</el-table-column>
+								
 								<el-table-column prop="type_name" label="分类">
 								</el-table-column>
 								<el-table-column prop="vod_remarks" label="情况">
 								</el-table-column>
-								<el-table-column  label="情况"><el-button onclick="let a = document.createEvent('MouseEvents');a.initEvent('dblclick', true, true);this.dispatchEvent(a)">查看详细</el-button>
+								<el-table-column prop="vod_time" label="日期">
+								</el-table-column>
+								<el-table-column  label=""><el-button onclick="let a = document.createEvent('MouseEvents');a.initEvent('dblclick', true, true);this.dispatchEvent(a)">查看详细</el-button>
 								</el-table-column>
 							</el-table>
 						</div>
