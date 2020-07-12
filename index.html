@@ -1,1 +1,57 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="https://cdn.bootcdn.net/ajax/libs/dashjs/3.1.1/dash.all.min.js"></script>
+		<script src="https://cdn.bootcdn.net/ajax/libs/flv.js/1.5.0/flv.min.js"></script>
+		<script src="https://cdn.bootcdn.net/ajax/libs/hls.js/8.0.0-beta.3/hls.min.js"></script>
+		<script src="https://cdn.bootcdn.net/ajax/libs/webtorrent/0.108.6/webtorrent.min.js"></script>
+		<script src="https://cdn.bootcdn.net/ajax/libs/dplayer/1.25.1/DPlayer.min.js"></script>
+		<script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.0/vue.min.js"></script>
 
+
+		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+		<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/index.css"/>
+	</head>
+	
+	<body>
+		<div id="app">
+
+			<el-container>
+				<el-container>
+					<el-header>
+						<el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+
+							<el-menu-item index="1">视频搜索</el-menu-item>
+							<el-menu-item index="2">视频解析</el-menu-item>
+						</el-menu>
+					</el-header>
+					<el-main>
+						<el-input class="inline-input" v-model='searchText' placeholder="请输入 URL 或者 搜索信息 并回车" @change='isURL()' clearable></el-input>
+						<div id="index-1" v-show='activeIndex==1'>
+							<h3>双击查看详细</h3>
+							<el-table :data="webSearchResult" style="width: 100%" @row-dblclick='webSearchDetail'>
+								<el-table-column prop="vod_name" label="名称">
+								</el-table-column>
+								<el-table-column prop="vod_time" label="日期">
+								</el-table-column>
+								<el-table-column prop="type_name" label="分类">
+								</el-table-column>
+								<el-table-column prop="vod_remarks" label="情况">
+								</el-table-column>
+
+							</el-table>
+						</div>
+						<div id="index-2" v-show='activeIndex==2' align="center">
+							<div id="dplayer" style="width: 80%;"></div>
+						</div>
+
+					</el-main>
+					<el-footer></el-footer>
+				</el-container>
+			</el-container>
+		</div>
+	</body>
+</html>
