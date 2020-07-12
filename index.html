@@ -29,9 +29,10 @@
 						</el-menu>
 					</el-header>
 					<el-main>
-						<el-input class="inline-input" v-model='searchText' placeholder="请输入 URL 或者 搜索信息 并回车" @change='isURL()' clearable></el-input>
+						<el-input class="inline-input" v-model='searchText' placeholder="请输入 URL 或者 搜索信息 并回车" @change='isURL()' clearable> <el-button slot="append" icon="el-icon-search" @click='isURL()'></el-button></el-input>
+						<h1></h1>
 						<div id="index-1" v-show='activeIndex==1'>
-							<h3>双击查看详细</h3>
+							
 							<el-table :data="webSearchResult" style="width: 100%" @row-dblclick='webSearchDetail'>
 								<el-table-column prop="vod_name" label="名称">
 								</el-table-column>
@@ -41,7 +42,8 @@
 								</el-table-column>
 								<el-table-column prop="vod_remarks" label="情况">
 								</el-table-column>
-
+								<el-table-column  label="情况"><el-button onclick="let a = document.createEvent('MouseEvents');a.initEvent('dblclick', true, true);this.dispatchEvent(a)">查看详细</el-button>
+								</el-table-column>
 							</el-table>
 						</div>
 						<div id="index-2" v-show='activeIndex==2' align="center">
