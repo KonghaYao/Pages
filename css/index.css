@@ -1,0 +1,62 @@
+::-webkit-scrollbar {
+			/*滚动条整体样式*/
+			width: 0px;
+			/*高宽分别对应横竖滚动条的尺寸*/
+			height: 0px;
+			scrollbar-arrow-color: red;
+		
+		}.el-message-box {
+   display: inline-grid;
+}.el-message-box__btns {
+    display: none;
+}
+		.el-header,
+		.el-footer {
+			background-color: #eeeeee;
+			color: #333;
+			text-align: center;
+			line-height: 60px;
+			padding: 0;
+		}
+
+		
+
+		section {
+			height: 100%;
+		}
+
+		.el-main {
+			background-color: #f8f8f8;
+			color: #333;
+			padding: 10px;
+		}
+
+		ul.el-menu-vertical-demo.el-menu {
+			height: 100%;
+		}
+
+		.el-menu-vertical-demo:not(.el-menu--collapse) {
+			width: 150px;
+			min-height: 400px;
+		}
+
+		div#pane-third {
+			display: grid;
+			grid-row-gap: 20px;
+		}
+
+		.el-message-box__content {overflow: scroll;position: relative;
+		    height: 100%;}
+			.el-message-box {
+		    width: 80% !important;
+		    height: 90%;
+			
+		}
+
+		html,
+		body,
+		#app {
+			height: 100%;
+			margin: 0;
+			padding: 0;
+		}
