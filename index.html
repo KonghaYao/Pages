@@ -177,7 +177,7 @@
 				},
 				addhistory(a) {
 					if (this.history.every(i => i.vod_id !== a.vod_id)) {
-						this.history.push(a)
+						this.history.unshift(a)
 						ls[a.vod_id] = a
 					}
 
