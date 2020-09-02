@@ -1,236 +1,248 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0,minimum=1.0,user-scalable=no">
-		<meta name="format-detection" content="telephone=no, email=no">
-		<meta name="x5-orientation" content="landscape">
-		<meta name="x5-fullscreen" content="true">
-		<meta name="x5-page-mode" content="default">
-		<meta name="screen-orientation" content="landscape">
-		<meta name="full-screen" content="yes">
-		<meta name="browsermode" content="application">
-		<meta name="layoutmode" content="fitscreen">
-		<meta name="nightmode" content="disable">
-		<meta name="imagemode" content="force">
-		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-		<meta name="apple-mobile-web-app-title" content="APP name">
-		<title>视频搜索</title>
-		<script src="https://cdn.jsdelivr.net/npm/flv.js/dist/flv.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js/dist/hls.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/dashjs/dist/dash.all.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/webtorrent/latest/webtorrent.min.js"></script>
-		<script src="https://cdn.bootcdn.net/ajax/libs/dplayer/1.25.1/DPlayer.min.js"></script>
-		<script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.0/vue.min.js"></script>
-		<link href="https://cdn.bootcdn.net/ajax/libs/element-ui/2.13.2/theme-chalk/index.css" rel="stylesheet">
-		<script src="https://cdn.bootcdn.net/ajax/libs/element-ui/2.13.2/index.js"></script>
-		<link rel="stylesheet" type="text/css" href="css/index.css" />
-	</head>
 
-	<body>
-		<div id="app">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0,maximum-scale=1.0,minimum=1.0,user-scalable=no">
+	<meta name="format-detection" content="telephone=no, email=no">
+	<meta name="x5-orientation" content="landscape">
+	<meta name="x5-fullscreen" content="true">
+	<meta name="x5-page-mode" content="default">
+	<meta name="screen-orientation" content="landscape">
+	<meta name="full-screen" content="yes">
+	<meta name="browsermode" content="application">
+	<meta name="layoutmode" content="fitscreen">
+	<meta name="nightmode" content="disable">
+	<meta name="imagemode" content="force">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-mobile-web-app-title" content="APP name">
+	<title>视频搜索</title>
 
+	<link href="https://cdn.bootcdn.net/ajax/libs/element-ui/2.13.2/theme-chalk/index.css" rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" href="css/index.css" />
+</head>
+
+<body>
+	<div id="app">
+
+		<el-container>
 			<el-container>
-				<el-container>
-					<el-header>
-						<el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-							<el-menu-item index="0">历史记录</el-menu-item>
-							<el-menu-item index="1">视频搜索</el-menu-item>
-							<el-menu-item index="2">视频解析</el-menu-item>
-						</el-menu>
-					</el-header>
-					<el-main>
-						<el-input class="inline-input" v-model='searchText' placeholder="请输入 URL 或者 搜索信息 并回车" @change='isURL()' clearable>
-							<el-button slot="append" icon="el-icon-search" @click='isURL()'></el-button>
-						</el-input>
-						<h1></h1>
-						<div id="index-0" v-show='activeIndex==0'>
+				<el-header>
+					<el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal"
+						@select="handleSelect">
+						<el-menu-item index="0">历史记录</el-menu-item>
+						<el-menu-item index="1">视频搜索</el-menu-item>
+						<el-menu-item index="2">视频解析</el-menu-item>
+					</el-menu>
+				</el-header>
+				<el-main>
+					<el-input class="inline-input" v-model='searchText' placeholder="请输入 URL 或者 搜索信息 并回车"
+						@change='isURL()' clearable>
+						<el-button slot="append" icon="el-icon-search" @click='isURL()'></el-button>
+					</el-input>
+					<h1></h1>
+					<div id="index-0" v-show='activeIndex==0'>
 
-							<el-table :data="history" style="width: 100%" @row-dblclick='webSearchDetail'>
-								<el-table-column prop="vod_name" label="名称">
-								</el-table-column>
+						<el-table :data="history" style="width: 100%" @row-dblclick='webSearchDetail'>
+							<el-table-column prop="vod_name" label="名称">
+							</el-table-column>
 
-								<el-table-column prop="type_name" label="分类">
-								</el-table-column>
-								<el-table-column prop="vod_remarks" label="情况">
-								</el-table-column>
-								<el-table-column >
-									<el-button @click="delHistory($event.target.parentElement.parentElement.parentElement.rowIndex)">删除</el-button>
-								</el-table-column>
-								<el-table-column >
-									<el-button onclick="let a = document.createEvent('MouseEvents');a.initEvent('dblclick', true, true);this.dispatchEvent(a)">查看详细</el-button>
+							<el-table-column prop="type_name" label="分类">
+							</el-table-column>
+							<el-table-column prop="vod_remarks" label="情况">
+							</el-table-column>
+							<el-table-column>
+								<el-button
+									@click="delHistory($event.target.parentElement.parentElement.parentElement.rowIndex)">
+									删除</el-button>
+							</el-table-column>
+							<el-table-column>
+								<el-button
+									onclick="let a = document.createEvent('MouseEvents');a.initEvent('dblclick', true, true);this.dispatchEvent(a)">
+									查看详细</el-button>
 
-								</el-table-column>
-							</el-table>
-						</div>
-						<div id="index-1" v-show='activeIndex==1'>
+							</el-table-column>
+						</el-table>
+					</div>
+					<div id="index-1" v-show='activeIndex==1'>
 
-							<el-table :data="webSearchResult" style="width: 100%" @row-dblclick='webSearchDetail'>
-								<el-table-column prop="vod_name" label="名称">
-								</el-table-column>
+						<el-table :data="webSearchResult" style="width: 100%" @row-dblclick='webSearchDetail'>
+							<el-table-column prop="vod_name" label="名称">
+							</el-table-column>
 
-								<el-table-column prop="type_name" label="分类">
-								</el-table-column>
-								<el-table-column prop="vod_remarks" label="情况">
-								</el-table-column>
-								<el-table-column prop="vod_time" label="日期">
-								</el-table-column>
-								<el-table-column label="">
-									<el-button onclick="let a = document.createEvent('MouseEvents');a.initEvent('dblclick', true, true);this.dispatchEvent(a)">查看详细</el-button>
-								</el-table-column>
-							</el-table>
-						</div>
-						<div id="index-2" v-show='activeIndex==2' align="center">
-							<div id="dplayer" style="width: 80%;"></div>
-						</div>
+							<el-table-column prop="type_name" label="分类">
+							</el-table-column>
+							<el-table-column prop="vod_remarks" label="情况">
+							</el-table-column>
+							<el-table-column prop="vod_time" label="日期">
+							</el-table-column>
+							<el-table-column label="">
+								<el-button
+									onclick="let a = document.createEvent('MouseEvents');a.initEvent('dblclick', true, true);this.dispatchEvent(a)">
+									查看详细</el-button>
+							</el-table-column>
+						</el-table>
+					</div>
+					<div id="index-2" v-show='activeIndex==2' align="center">
+						<div id="dplayer" style="width: 80%;"></div>
+					</div>
 
-					</el-main>
-					<el-footer>2020 7 14 日更新</el-footer>
-				</el-container>
+				</el-main>
+				<el-footer>2020 7 14 日更新</el-footer>
 			</el-container>
-		</div>
-	</body>
+		</el-container>
+	</div>
+</body>
+<script src="https://cdn.bootcdn.net/ajax/libs/element-ui/2.13.2/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flv.js/dist/flv.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/hls.js/dist/hls.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dashjs/dist/dash.all.min.js"></script>
+<script src="https://cdn.jsdelivr.net/webtorrent/latest/webtorrent.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/dplayer/1.25.1/DPlayer.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.0/vue.min.js"></script>
+<script type="text/javascript">
+	var vm = new Vue({
+		el: '#app',
+		data: {
+			activeIndex: '1',
+			searchText: '',
+			webSearchResult: [],
+			history: [],
+		},
+		mounted() {
+			window.dp = new DPlayer({
+				screenshot: true, //截屏
+				hotkey: true,
+				container: document.getElementById('dplayer'),
+				video: {
+					url: '',
+				}
 
-	<script type="text/javascript">
-		var vm = new Vue({
-			el: '#app',
-			data: {
-				activeIndex: '1',
-				searchText: '',
-				webSearchResult: [],
-				history: [],
-			},
-			mounted() {
-				window.dp = new DPlayer({
-					screenshot: true, //截屏
-					hotkey: true,
-					container: document.getElementById('dplayer'),
-					video: {
-						url: '',
+			});
+			this.webSearch();
+			window.ls = new Proxy({}, {
+				set(lS, key, value) { //直接设置属性 当设置为空时 删除这个属性
+					if (value) {
+						value = typeof (value) === 'object' ? JSON.stringify(value) : value
+						localStorage.setItem(key, value)
+					} else {
+						localStorage.removeItem(key)
 					}
 
+				},
+				get(lS, key) {
+					if (localStorage.hasOwnProperty(key)) {
+						return localStorage.getItem(key)
+					}
+				}
+			})
+			Object.values(localStorage).forEach(i => this.history.push(JSON.parse(i)))
+		},
+		methods: {
+			delHistory(index) {
+				ls[this.history[index].vod_id] = ''
+				this.history.splice(index, 1)
+			},
+			handleSelect(key, keyPath) {
+				this.activeIndex = key
+			},
+			isURL() {
+				this.searchText.search(/(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/) >=
+					0 ? dp.switchVideo({
+						url: vm.searchText,
+					}) : this.webSearch()
+			},
+			webSearch() {
+				this.webSearchResult = []
+				this.$notify({
+					message: '搜索中，请稍后',
+					type: 'success', position: 'bottom-right'
 				});
-				this.webSearch();
-				window.ls = new Proxy({}, {
-					set(lS, key, value) { //直接设置属性 当设置为空时 删除这个属性
-						if (value) {
-							value = typeof(value) === 'object' ? JSON.stringify(value) : value
-							localStorage.setItem(key, value)
-						} else {
-							localStorage.removeItem(key)
-						}
-
-					},
-					get(lS, key) {
-						if (localStorage.hasOwnProperty(key)) {
-							return localStorage.getItem(key)
-						}
-					}
+				fetch('https://api.okzy.tv/api.php/provide/vod/?wd=' + this.searchText).then(res => res.json()).then(res => {
+					res.list
+						.forEach(i => {
+							this.webSearchResult.push(i)
+						})
+					this.$notify({
+						message: '结果已经返回',
+						type: 'success', position: 'bottom-right'
+					});
 				})
-				Object.values(localStorage).forEach(i => this.history.push(JSON.parse(i)))
+
 			},
-			methods: {
-				delHistory(index){
-					ls[this.history[index].vod_id]=''
-					this.history.splice(index,1)
-				},
-				handleSelect(key, keyPath) {
-					this.activeIndex = key
-				},
-				isURL() {
-					this.searchText.search(/(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/) >=
-						0 ? dp.switchVideo({
-							url: vm.searchText,
-						}, ) : this.webSearch()
-				},
-				webSearch() {
-					this.webSearchResult = []
-					this.$notify({
-						message: '搜索中，请稍后',
-						type: 'success',position: 'bottom-right'
-					});
-					fetch('https://api.okzy.tv/api.php/provide/vod/?wd=' + this.searchText).then(res => res.json()).then(res => {
-						res.list
-							.forEach(i => {
-								this.webSearchResult.push(i)
-							})
-						this.$notify({
-							message: '结果已经返回',
-							type: 'success',position: 'bottom-right'
-						});
-					})
+			PlaySrc(e) {
+				console.log(e.dataset.src)
+				dp.switchVideo({
+					url: e.dataset.src,
+				});
+				document.querySelector('.el-message-box__headerbtn').click();
+				this.activeIndex = 2
+				this.$notify({
+					title: '视频播放',
+					message: '请等待加载'
+				});
+				dp.play()
+			},
+			addhistory(a) {
+				if (this.history.every(i => i.vod_id !== a.vod_id)) {
+					this.history.unshift(a)
+					ls[a.vod_id] = a
+				}
 
-				},
-				PlaySrc(e) {
-					console.log(e.dataset.src)
-					dp.switchVideo({
-						url: e.dataset.src,
-					});
-					document.querySelector('.el-message-box__headerbtn').click();
-					this.activeIndex = 2
-					this.$notify({
-						title: '视频播放',
-						message: '请等待加载'
-					});
-					dp.play()
-				},
-				addhistory(a) {
-					if (this.history.every(i => i.vod_id !== a.vod_id)) {
-						this.history.unshift(a)
-						ls[a.vod_id] = a
+			},
+			webSearchDetail(a, b) {
+				console.log(a, b)
+				this.$loading({
+					lock: true,
+					text: 'Loading',
+					spinner: 'el-icon-loading',
+					background: 'rgba(0, 0, 0, 0.7)'
+				});
+				this.addhistory(a)
+				fetch('https://api.okzy.tv/api.php/provide/vod/?ac=detail&ids=' + a['vod_id']).then(res => res.json()).then(res => {
+					let i = res.list[0]
+					let a = {
+						name: i.vod_name,
+
+						content: i.vod_content,
+						pic: i.vod_pic,
+						lang: i.vod_lang,
+						year: i.vod_year
 					}
+					let b = i.vod_play_url.split('$$$').map(ii => {
+						return ii.split('#')
+					}).flat()
 
-				},
-				webSearchDetail(a, b) {
-					console.log(a, b)
-					this.$loading({
-						lock: true,
-						text: 'Loading',
-						spinner: 'el-icon-loading',
-						background: 'rgba(0, 0, 0, 0.7)'
-					});
-					this.addhistory(a)
-					fetch('https://api.okzy.tv/api.php/provide/vod/?ac=detail&ids=' + a['vod_id']).then(res => res.json()).then(res => {
-						let i = res.list[0]
-						let a = {
-							name: i.vod_name,
+					a.src = b.filter(iii => {
+						let c = iii.split('$');
+						return c[1].search(/\.m3u8/) >= 0
+					}).map(iii => {
+						let c = iii.split('$');
+						return `<button type="button" onclick='vm.PlaySrc(this)' data-src ='${c[1]}'>${c[0]}</button>`
 
-							content: i.vod_content,
-							pic: i.vod_pic,
-							lang: i.vod_lang,
-							year: i.vod_year
-						}
-						let b = i.vod_play_url.split('$$$').map(ii => {
-							return ii.split('#')
-						}).flat()
+					}).join('')
 
-						a.src = b.filter(iii => {
-							let c = iii.split('$');
-							return c[1].search(/\.m3u8/) >= 0
-						}).map(iii => {
-							let c = iii.split('$');
-							return `<button type="button" onclick='vm.PlaySrc(this)' data-src ='${c[1]}'>${c[0]}</button>`
-
-						}).join('')
-
-						this.$loading().close()
-						this.$confirm(
-							`<div>
+					this.$loading().close()
+					this.$confirm(
+						`<div>
 									<img src='${a.pic}' style='height:400px'></img>
 									<div>${a.content}</div>
 									
 								</div><div>
 										${a.src}
 									</div>`,
-							a.name, {
-								distinguishCancelAndClose: true,
-								dangerouslyUseHTMLString: true
-							})
+						a.name, {
+						distinguishCancelAndClose: true,
+						dangerouslyUseHTMLString: true
 					})
-				},
-			}
+				})
+			},
+		}
 
-		})
-	</script>
+	})
+</script>
+
 </html>
