@@ -91,18 +91,19 @@
 					</div>
 
 				</el-main>
-				<el-footer>2020 7 14 日更新</el-footer>
+				<el-footer>2020 9 13 日更新</el-footer>
 			</el-container>
 		</el-container>
 	</div>
 </body>
+<script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.0/vue.min.js"></script>
 <script src="https://cdn.bootcdn.net/ajax/libs/element-ui/2.13.2/index.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/flv.js/dist/flv.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/hls.js/dist/hls.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/dashjs/dist/dash.all.min.js"></script>
 <script src="https://cdn.jsdelivr.net/webtorrent/latest/webtorrent.min.js"></script>
 <script src="https://cdn.bootcdn.net/ajax/libs/dplayer/1.25.1/DPlayer.min.js"></script>
-<script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.0/vue.min.js"></script>
+
 <script type="text/javascript">
 	var vm = new Vue({
 		el: '#app',
@@ -127,28 +128,36 @@
 				set(lS, key, value) { //直接设置属性 当设置为空时 删除这个属性
 					if (value) {
 						value = typeof (value) === 'object' ? JSON.stringify(value) : value
-						localStorage.setItem(key, value)
+						var data = new Date();
+						data.setTime(data.getTime() + 10000 * 24 * 60 * 60 * 1000);
+						expires = data.toUTCString();
+						document.cookie = `${key}=${value}; expires=${expires}; path=/`;
 					} else {
-						localStorage.removeItem(key)
+						document.cookie = `${key}=''; expires=-1; path=/`;
 					}
-
 				},
 				get(lS, key) {
-					if (localStorage.hasOwnProperty(key)) {
-						return localStorage.getItem(key)
-					}
+					return Object.fromEntities(document.cookie.split(";").map((i) => i.split("=")))[key] || undefined;
 				}
 			})
-			Object.values(localStorage).forEach(i => this.history.push(JSON.parse(i)))
+			document.cookie.split(";").map((i) => this.history.push(JSON.parse(i.split("=")[1])))
 		},
 		methods: {
 			delHistory(index) {
 				ls[this.history[index].vod_id] = ''
 				this.history.splice(index, 1)
 			},
+			addhistory(a) {
+				if (this.history.every(i => i.vod_id !== a.vod_id)) {
+					this.history.unshift(a)
+					ls[a.vod_id] = a
+				}
+
+			},
 			handleSelect(key, keyPath) {
 				this.activeIndex = key
 			},
+
 			isURL() {
 				this.searchText.search(/(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/) >=
 					0 ? dp.switchVideo({
@@ -159,7 +168,9 @@
 				this.webSearchResult = []
 				this.$notify({
 					message: '搜索中，请稍后',
-					type: 'success', position: 'bottom-right'
+					type: 'success',
+					position: 'bottom-right',
+					duration: 1500
 				});
 				fetch('https://api.okzy.tv/api.php/provide/vod/?wd=' + this.searchText).then(res => res.json()).then(res => {
 					res.list
@@ -168,7 +179,7 @@
 						})
 					this.$notify({
 						message: '结果已经返回',
-						type: 'success', position: 'bottom-right'
+						type: 'success', position: 'bottom-right', duration: 1500
 					});
 				})
 
@@ -182,17 +193,12 @@
 				this.activeIndex = 2
 				this.$notify({
 					title: '视频播放',
-					message: '请等待加载'
+					message: '请等待加载',
+					duration: 1500
 				});
 				dp.play()
 			},
-			addhistory(a) {
-				if (this.history.every(i => i.vod_id !== a.vod_id)) {
-					this.history.unshift(a)
-					ls[a.vod_id] = a
-				}
 
-			},
 			webSearchDetail(a, b) {
 				console.log(a, b)
 				this.$loading({
